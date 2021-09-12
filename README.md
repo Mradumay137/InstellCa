@@ -1,0 +1,2 @@
+# InstellCa
+Exoplanet instellation calculator
