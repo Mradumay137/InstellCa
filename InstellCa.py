@@ -349,6 +349,7 @@ if num>1:
     imagename=input("Saving image..Enter image name and format:")
 plt.savefig(imagename,dpi=100,quality=95)
 plt.show()  
+"""
 opt=float(input("Enter 0 for displaying the zenith angle plot else press 1 to quit:"))            
 if opt==0:
     plt.figure(figsize=(row**2+2*row+7,col**2+3*col+3))
@@ -361,3 +362,4 @@ if opt==0:
         plt.title("{0}".format(exoplanet))
 plt.savefig("Zenith_angle",dpi=500,quality=95)
 plt.show() 
+"""
