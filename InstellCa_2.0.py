@@ -359,7 +359,8 @@ for te in range(1,num+1):
                         newa.append(newp)
         
                     value2=value*P/(4*np.pi*np.pi)
-                    if lon>s1 or lon<-s1:
+                    
+                    if lon>s1 or lon<-s1: # This represents the cone bound by external tangent planes
                         value2=0
                     
                     final.append(value2)
@@ -386,17 +387,18 @@ for te in range(1,num+1):
             inve=np.asarray(inverse)
            
             P_lat_orbit_avg = np.mean(aver, axis=0)  
+            
             inve1=np.mean(inve,axis=0)
             A = 0.3
             aver1 = ((P_lat_orbit_avg * 10**8 * (1 - A)) / 5.67) ** 0.25
  
             
-        P_global_avg = np.sum(P_lat_orbit_avg * np.cos(la1)) / np.sum(np.cos(la1))
-    
-     
+        P_global_avg = np.sum(P_lat_orbit_avg * np.cos(la1)) / np.sum(np.cos(la1))         
         T_b = ((P_global_avg * 10**8 * (1 - A)) / 5.67) ** 0.25
         
         print(T_b)
+        
+        print(P_lat_orbit_avg[299])
         
         maxlatitude=symp*57.3
         #tickarray2=np.array([-150,-130,-110,-90,-70,-50,-30,-10,10,30,50,70,90,110,130,150])
@@ -404,8 +406,8 @@ for te in range(1,num+1):
         if parameter==0:
             plt.plot(la2,P_lat_orbit_avg,'b-',label="Geometric Model")
             plt.plot(la2,inve1,'r--', label="Inverse-square law")
-        plt.plot(la2,P_lat_orbit_avg,'b-',label="Geometric Model")
-        
+        plt.plot(la2,aver1,'b-',label="Geometric Model")
+
         #plt.xticks(tickarray2,fontsize=14)
         #plt.yticks(fontsize=14)
         plt.axvline(x=maxlatitude,color='gray',linestyle='--',label='Critical point of symmetry')
