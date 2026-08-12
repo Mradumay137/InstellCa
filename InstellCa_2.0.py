@@ -360,7 +360,7 @@ for te in range(1,num+1):
         
                     value2=value*P/(4*np.pi*np.pi)
                     
-                    if lon>s1 or lon<-s1: # This represents the cone bound by external tangent planes
+                    if lon>s1 or lon<-s1: # This represents the cone bound by external tangent planets. All latitudes share the same cut-off longitude.
                         value2=0
                     
                     final.append(value2)
