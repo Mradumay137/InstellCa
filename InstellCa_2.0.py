@@ -26,6 +26,7 @@ from scipy import integrate
 
 num=int(input("Enter number of planets to be plotted:"))
 num1=round(math.sqrt(num))
+parameter=int(input("Enter 0 for tidal locking and 1 for diurnal rotation:"))
 col=num1
 row=math.ceil(num/num1)
 cwd=os.getcwd()
@@ -235,16 +236,23 @@ for te in range(1,num+1):
             al=al2*(1-ecc**2)/(1+ecc*math.cos(true))
             d=al-rs-rp
             ch=math.acos(rp/(d+rp))
-            s3=(math.asin(abs(rs-rp)/al))
-            s1=(np.pi/2)
+            s3=0
+            if parameter==0:
+                s3=(math.asin(abs(rs-rp)/al))
+            
+            s1=(np.pi/2+s3)
             s1=math.floor(s1*180/np.pi)
             s1=s1*np.pi/180
             s=np.pi/2
             symp=math.acos((rs+rp)/al)
-            la1=np.linspace(-np.pi/2,np.pi/2,300)
-            la2=np.linspace(-90,90,300)
-            
+            la1=np.linspace(-s,s,300)
+            la2=np.linspace(-s*57.3,s*57.3,300)
+            if parameter==0:
+                la1=np.linspace(-s1,s1,300)
+                la2=np.linspace(-s1*57.3,s1*57.3,300)
             lon1=np.linspace(-np.pi,np.pi,300)
+            if parameter==0:
+                lon1=np.linspace(0,0,300)
             surfgrav=100*6.67*10**(-11)*M/rs**(2)
             logg=math.log10(surfgrav)
             oldfor=[]
@@ -298,6 +306,7 @@ for te in range(1,num+1):
                         ll=-math.acos((rs*(al-rp*math.cos(la))+rp*math.sin(la)*np.sqrt(al**2+rp**2-rs**2-2*al*rp*math.cos(la)))/(al**2+rp**2-2*al*rp*math.cos(la)))
                         ul=math.acos((rs*(al-rp*math.cos(la))-rp*math.sin(la)*np.sqrt(al**2+rp**2-rs**2-2*al*rp*math.cos(la)))/(al**2+rp**2-2*al*rp*math.cos(la)))
                     
+                    
                     if abs(la)>=symp and la>0 and abs(lon)>=symp:
                         ll=-la+math.acos((al*math.cos(la)-rp)/rs)
                         ul=math.acos((rs*(al-rp*math.cos(la))-rp*math.sin(la)*np.sqrt(al**2+rp**2-rs**2-2*al*rp*math.cos(la)))/(al**2+rp**2-2*al*rp*math.cos(la)))
@@ -306,6 +315,16 @@ for te in range(1,num+1):
                         
                         ul=-la-math.acos((al*math.cos(la)-rp)/rs)
                         ll=-math.acos((rs*(al-rp*math.cos(la))+rp*math.sin(la)*np.sqrt(al**2+rp**2-rs**2-2*al*rp*math.cos(la)))/(al**2+rp**2-2*al*rp*math.cos(la)))
+                    
+                    if parameter==0:
+                        if abs(la)>=symp and la>0:
+                            ll=-la+math.acos((al*math.cos(la)-rp)/rs)
+                            ul=math.acos((rs*(al-rp*math.cos(la))-rp*math.sin(la)*np.sqrt(al**2+rp**2-rs**2-2*al*rp*math.cos(la)))/(al**2+rp**2-2*al*rp*math.cos(la)))
+                            
+                        if abs(la)>=symp and la<0:
+                            ul=-la-math.acos((al*math.cos(la)-rp)/rs)
+                            ll=-math.acos((rs*(al-rp*math.cos(la))+rp*math.sin(la)*np.sqrt(al**2+rp**2-rs**2-2*al*rp*math.cos(la)))/(al**2+rp**2-2*al*rp*math.cos(la)))
+                        
                     
                     if la==0:
                         ll=math.acos(rs/(al-rp))
@@ -326,7 +345,9 @@ for te in range(1,num+1):
                     def integration(th,la): #First integral
                         return quad(function,ll,ul,args=(th,la))[0]
                     
-                  
+                    if parameter==0:
+                        def integration(th,la): #First integral
+                            return quad(function,-y3,y3,args=(th,la))[0]
                     
                     #Second integral
                     
@@ -340,35 +361,32 @@ for te in range(1,num+1):
                     value2=value*P/(4*np.pi*np.pi)
                     if lon>s1 or lon<-s1:
                         value2=0
+                    
                     final.append(value2)
                     
-                    old=abs(P1*math.cos(la)*math.cos(lon)/(4*np.pi*(al**2+rp**2-2*al*rp*math.cos(la)*math.cos(lon))))
-                    
-                    
-                      
-                    """
-                    if la>0: 
+                    old=abs(P1*math.cos(la5)/(4*np.pi*(al**2+rp**2-2*al*rp*math.cos(la))))
+ 
+                    if la>=0: 
                         if la5<0 or lon5<0:
                             old=0
                     if la<0:
                         if la5>0 or lon5>0:
                     
                             old=0
-                    """
+                    
                     oldfor.append(old)
-
-                err=abs(oldfor[250]-final[250])
-
-                
+        
                 newval=np.mean(final)
                 integrated.append(newval)
+                integrated_comp.append(np.mean(oldfor))
  
-            #inverse.append(integrated_comp)
+            inverse.append(integrated_comp)
             average.append(integrated)
             aver=np.asarray(average)
             inve=np.asarray(inverse)
            
-            P_lat_orbit_avg = np.mean(aver, axis=0)        
+            P_lat_orbit_avg = np.mean(aver, axis=0)  
+            inve1=np.mean(inve,axis=0)
             A = 0.3
             aver1 = ((P_lat_orbit_avg * 10**8 * (1 - A)) / 5.67) ** 0.25
  
@@ -382,9 +400,12 @@ for te in range(1,num+1):
         
         maxlatitude=symp*57.3
         #tickarray2=np.array([-150,-130,-110,-90,-70,-50,-30,-10,10,30,50,70,90,110,130,150])
-        plt.subplot(row,col,te)    
-        plt.plot(la2,aver1,'b-',label="Geometric Model")
-        #plt.plot(la2,inve1,'r--', label="Inverse-square law")
+        plt.subplot(row,col,te)
+        if parameter==0:
+            plt.plot(la2,P_lat_orbit_avg,'b-',label="Geometric Model")
+            plt.plot(la2,inve1,'r--', label="Inverse-square law")
+        plt.plot(la2,P_lat_orbit_avg,'b-',label="Geometric Model")
+        
         #plt.xticks(tickarray2,fontsize=14)
         #plt.yticks(fontsize=14)
         plt.axvline(x=maxlatitude,color='gray',linestyle='--',label='Critical point of symmetry')
