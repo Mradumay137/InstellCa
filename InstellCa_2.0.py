@@ -222,12 +222,11 @@ for te in range(1,num+1):
             al=al2*(1-ecc**2)/(1+ecc*math.cos(true))
             d=al-rs-rp
             ch=math.acos(rp/(d+rp))
-            s3=0
-            if parameter==0:
-                s3=(math.asin(abs(rs-rp)/al))            
+            s3=(math.asin(abs(rs-rp)/al))       
             s1=(np.pi/2+s3)
             s1=math.floor(s1*180/np.pi)
             s1=s1*np.pi/180
+            term=(math.asin(abs(rs-rp)/al)) 
             s=np.pi/2
             symp=math.acos((rs+rp)/al)
             la1=np.linspace(-s,s,300)
@@ -314,17 +313,18 @@ for te in range(1,num+1):
                             lf=1-u*(1-mu)
                         if para==2:
                             lf=1-u1*(1-mu)-u2*(1-mu)**2
-                        return (a+b)*lf*mu*math.cos(th)/(c**1.5)
+                        return abs(a+b)*lf*mu*math.cos(th)/(c**1.5)
                     def integration(th,la): #First integral
                         return quad(function,-y3,y3,args=(th,la))[0] #A bit simplistic approximation for rotation but works well        
                     #Second integral                    
                     value=quad(lambda th: integration(th,la),ll, ul)[0]
                     la5=math.atan(al*math.tan(la)*math.cos(la)/(al*math.cos(la)-rp))
                     lon5=math.atan(al*math.tan(lon)*math.cos(lon))/(al*math.cos(lon)-rp)                    
-                    tange=math.acos(rp/al)        
-                    value2=value*P/(4*np.pi*np.pi)                    
-                    if lon>s1 or lon<-s1: # This represents the cone bound by external tangent planets. All latitudes share the same cut-off longitude.
-                       value2=0
+                    tange=math.acos(rp/(al))        
+                    value2=value*P/(4*np.pi*np.pi)
+                    if la<symp or la>-symp:                    
+                        if lon>s1 or lon<-s1: # Penumbra always illuminated but not the fully-illuminated zone that experiences a diurnal cycle.
+                           value2=0
                     final.append(value2)                    
                     old=P1*(al*math.cos(la)*math.cos(lon)-rp)/(4*np.pi*(al**2+rp**2-2*al*rp*math.cos(la)*math.cos(lon))**1.5)
                     if lon>tange or la>tange:
@@ -342,8 +342,7 @@ for te in range(1,num+1):
             P_lat_orbit_avg = np.mean(aver, axis=0)  
             inve1=np.mean(inve,axis=0)
             err=P_lat_orbit_avg[150]-inve1[150]
-            print(err)
-            A = 0.3
+            A = 0.45
             aver1 = ((P_lat_orbit_avg * 10**8 * (1 - A)) / 5.67) ** 0.25         
         P_global_avg = np.sum(P_lat_orbit_avg * np.cos(la1)) / np.sum(np.cos(la1))         
         T_b = ((P_global_avg * 10**8 * (1 - A)) / 5.67) ** 0.25
@@ -355,6 +354,7 @@ for te in range(1,num+1):
             plt.plot(la2,inve1,'r--', label="Inverse-square law")
         if parameter==1:    
             plt.plot(la2,aver1,'b-',label="Geometric Model")
+            #plt.plot(la2,P_lat_orbit_avg,'b-',label="Geometric Model")
             #plt.plot(la2,inve1,'r--', label="Inverse-square law")
         plt.axvline(x=maxlatitude,color='gray',linestyle='--',label='Critical point of symmetry')
         plt.axvline(x=-maxlatitude,color='gray',linestyle='--')
@@ -370,4 +370,4 @@ if num>1:
     imagename=input("Saving image..Enter image name and format:")
 plt.savefig(imagename,dpi=300)
 plt.show()  
-print("The Terminator extends to ",round(s1*57.3,3), "degrees from the equator")
+print("The Terminator extends to ",round((np.pi/2+term)*57.3,3), "degrees from the equator")
