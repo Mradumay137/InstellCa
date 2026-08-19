@@ -226,7 +226,7 @@ for te in range(1,num+1):
             s1=(np.pi/2+s3)
             s1=math.floor(s1*180/np.pi)
             s1=s1*np.pi/180
-            term=(math.asin(abs(rs-rp)/al)) 
+            term=(math.asin(abs(rs-rp)/al))             
             s=np.pi/2
             symp=math.acos((rs+rp)/al)
             la1=np.linspace(-s,s,300)
@@ -259,9 +259,10 @@ for te in range(1,num+1):
             for new in range(len(la1)):
                 la=la1[new]
                 final=[]
-                oldfor=[]
+                oldfor=[]  
+                symmetry=np.pi/2+(math.asin(abs(rs-rp*math.cos(la))/al))
                 for k in range(len(lon1)):
-                    lon=lon1[k]
+                    lon=lon1[k]                     
                     beta=al+rp*math.cos(np.pi-la)
                     y1=math.acos((rs**2-rp**2*(math.sin(la))**2)/(beta*rs - rp*math.sin(la)*(math.sqrt(rp**2*(math.sin(la))**2-rs**2+beta**2))))*180/np.pi
                     y4=math.acos((rs**2-rp**2*(math.sin(la))**2)/(beta*rs + rp*math.sin(la)*(math.sqrt(rp**2*(math.sin(la))**2-rs**2+beta**2))))*180/np.pi
@@ -322,9 +323,8 @@ for te in range(1,num+1):
                     lon5=math.atan(al*math.tan(lon)*math.cos(lon))/(al*math.cos(lon)-rp)                    
                     tange=math.acos(rp/(al))        
                     value2=value*P/(4*np.pi*np.pi)
-                    if la<symp or la>-symp:                    
-                        if lon>s1 or lon<-s1: # Penumbra always illuminated but not the fully-illuminated zone that experiences a diurnal cycle.
-                           value2=0
+                    if lon>symmetry or lon<-symmetry: # Penumbra always illuminated but not the fully-illuminated zone that experiences a diurnal cycle.
+                       value2=0
                     final.append(value2)                    
                     old=P1*(al*math.cos(la)*math.cos(lon)-rp)/(4*np.pi*(al**2+rp**2-2*al*rp*math.cos(la)*math.cos(lon))**1.5)
                     if lon>tange or la>tange:
