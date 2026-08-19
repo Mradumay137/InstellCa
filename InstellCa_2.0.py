@@ -342,7 +342,7 @@ for te in range(1,num+1):
             P_lat_orbit_avg = np.mean(aver, axis=0)  
             inve1=np.mean(inve,axis=0)
             err=P_lat_orbit_avg[150]-inve1[150]
-            A = 0.45
+            A = 0.42
             aver1 = ((P_lat_orbit_avg * 10**8 * (1 - A)) / 5.67) ** 0.25         
         P_global_avg = np.sum(P_lat_orbit_avg * np.cos(la1)) / np.sum(np.cos(la1))         
         T_b = ((P_global_avg * 10**8 * (1 - A)) / 5.67) ** 0.25
