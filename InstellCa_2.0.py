@@ -1,14 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Thu Sep 11 16:53:50 2025
-
-@author: maverick
-"""
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
 Created on Fri Mar 20 19:00:38 2020
 
 @author: Mradumay
@@ -42,8 +34,6 @@ if num<2:
     fig=plt.figure(figsize=(row**2/2+row+8, col**2+2*col+4),constrained_layout=False)
 if num>2:
     fig=plt.figure(figsize=(col**2+2*col+11,row**2/2+row+11), constrained_layout=False)
-
-newa=[]
 for te in range(1,num+1):
     itr=0
     for entry in files:
@@ -159,8 +149,7 @@ for te in range(1,num+1):
             fa1=float(input("Enter effective temperature:"))
         if opt==4 or opt==14 or opt==24 or opt==34:
             al1=float(input("Enter semi-major axis:"))
-    para=1
-    
+    para=1    
     while para!=4 and para!=1 and para!=2:
             para=float(input(Fore.RED +'Wrong option entered. Please re-enter:'))
             print(Style.RESET_ALL)
@@ -170,8 +159,7 @@ for te in range(1,num+1):
         rs1=float(input("Enter radius of the host star in units of solar radius:"))
         fa1=float(input("Enter effective Temperature of host star in K:"))
         al1=float(input("Enter semi-major axis of the planet from the star in AU:"))
-        ecc=float(input("Enter eccentricity:"))
-        
+        ecc=float(input("Enter eccentricity:"))        
         exoplanet=input("Enter name:")
         if para==4:
             M1=float(input("Enter stellar mass(solar units):"))
@@ -184,8 +172,7 @@ for te in range(1,num+1):
         u1=float(input("Enter bolometric quadratic coefficient(u1):"))
         u2=float(input("Enter bolometric quadratic coefficient(u2):"))   
         met=0
-        M1=1
-        
+        M1=1        
     if np.isnan(rs1)==True or np.isnan(fa1)==True or np.isnan(al1)==True:
         continue
         print(Fore.RED +"Crucial parameter missing")
@@ -217,8 +204,7 @@ for te in range(1,num+1):
             print(Fore.WHITE +'Generating Plot, Please wait.. \033[1;30;47m')
         print(Style.RESET_ALL)
         average=[]
-        inverse=[]
-        
+        inverse=[]        
         for j in range(0,number):
             # Orbital and physical parameters
             true=true1[j]*np.pi/180 
@@ -238,8 +224,7 @@ for te in range(1,num+1):
             ch=math.acos(rp/(d+rp))
             s3=0
             if parameter==0:
-                s3=(math.asin(abs(rs-rp)/al))
-            
+                s3=(math.asin(abs(rs-rp)/al))            
             s1=(np.pi/2+s3)
             s1=math.floor(s1*180/np.pi)
             s1=s1*np.pi/180
@@ -259,11 +244,10 @@ for te in range(1,num+1):
             final=[]
             denom=[]
             numer=[]
-            approx=[]
-            
+            approx=[]            
             #Limb Darkening
             if para==1 and u==0.6: 
-                fa=fa1*1.0573   
+                fa=fa1*(1.0573) #Milne-Eddington
             if para==1 and u==0:
                 fa=fa1
             P=5.67*10**(-8)*fa**(4)*4*np.pi*rs**2
@@ -292,136 +276,96 @@ for te in range(1,num+1):
                     ad1=180*math.atan(rs*math.sin(y)/(d+rs-(rs*math.cos(y))))/np.pi
                     ad=math.floor(ad1)*np.pi/180
                     vis=math.acos(rs/(math.sqrt(al**2+rp**2-2*al*rp*math.cos(la))))
-                    P1=5.67*10**(-8)*fa1**(4)*4*np.pi*(rs)**2
-                
+                    P1=5.67*10**(-8)*fa1**(4)*4*np.pi*(rs)**2                
                     y2=y6
-                    
-                    #Geometric Limits
-                    
+                    #Geometric Limits                    
                     if la>0 and abs(la)<symp and abs(lon)<symp: 
                         ll=-math.acos((rs*(al-rp*math.cos(la))+rp*math.sin(la)*np.sqrt(al**2+rp**2-rs**2-2*al*rp*math.cos(la)))/(al**2+rp**2-2*al*rp*math.cos(la)))
-                        ul=math.acos((rs*(al-rp*math.cos(la))-rp*math.sin(la)*np.sqrt(al**2+rp**2-rs**2-2*al*rp*math.cos(la)))/(al**2+rp**2-2*al*rp*math.cos(la)))
-                        
+                        ul=math.acos((rs*(al-rp*math.cos(la))-rp*math.sin(la)*np.sqrt(al**2+rp**2-rs**2-2*al*rp*math.cos(la)))/(al**2+rp**2-2*al*rp*math.cos(la)))                        
                     if la<0 and abs(la)<symp and abs(lon)<symp:
                         ll=-math.acos((rs*(al-rp*math.cos(la))+rp*math.sin(la)*np.sqrt(al**2+rp**2-rs**2-2*al*rp*math.cos(la)))/(al**2+rp**2-2*al*rp*math.cos(la)))
-                        ul=math.acos((rs*(al-rp*math.cos(la))-rp*math.sin(la)*np.sqrt(al**2+rp**2-rs**2-2*al*rp*math.cos(la)))/(al**2+rp**2-2*al*rp*math.cos(la)))
-                    
-                    
+                        ul=math.acos((rs*(al-rp*math.cos(la))-rp*math.sin(la)*np.sqrt(al**2+rp**2-rs**2-2*al*rp*math.cos(la)))/(al**2+rp**2-2*al*rp*math.cos(la)))     
                     if abs(la)>=symp and la>0 and abs(lon)>=symp:
                         ll=-la+math.acos((al*math.cos(la)-rp)/rs)
-                        ul=math.acos((rs*(al-rp*math.cos(la))-rp*math.sin(la)*np.sqrt(al**2+rp**2-rs**2-2*al*rp*math.cos(la)))/(al**2+rp**2-2*al*rp*math.cos(la)))
-                        
-                    if abs(la)>=symp and la<0 and abs(lon)>=symp:
-                        
+                        ul=math.acos((rs*(al-rp*math.cos(la))-rp*math.sin(la)*np.sqrt(al**2+rp**2-rs**2-2*al*rp*math.cos(la)))/(al**2+rp**2-2*al*rp*math.cos(la)))                        
+                    if abs(la)>=symp and la<0 and abs(lon)>=symp:                        
                         ul=-la-math.acos((al*math.cos(la)-rp)/rs)
-                        ll=-math.acos((rs*(al-rp*math.cos(la))+rp*math.sin(la)*np.sqrt(al**2+rp**2-rs**2-2*al*rp*math.cos(la)))/(al**2+rp**2-2*al*rp*math.cos(la)))
-                    
+                        ll=-math.acos((rs*(al-rp*math.cos(la))+rp*math.sin(la)*np.sqrt(al**2+rp**2-rs**2-2*al*rp*math.cos(la)))/(al**2+rp**2-2*al*rp*math.cos(la)))                    
                     if parameter==0:
                         if abs(la)>=symp and la>0:
                             ll=-la+math.acos((al*math.cos(la)-rp)/rs)
-                            ul=math.acos((rs*(al-rp*math.cos(la))-rp*math.sin(la)*np.sqrt(al**2+rp**2-rs**2-2*al*rp*math.cos(la)))/(al**2+rp**2-2*al*rp*math.cos(la)))
-                            
+                            ul=math.acos((rs*(al-rp*math.cos(la))-rp*math.sin(la)*np.sqrt(al**2+rp**2-rs**2-2*al*rp*math.cos(la)))/(al**2+rp**2-2*al*rp*math.cos(la)))                            
                         if abs(la)>=symp and la<0:
                             ul=-la-math.acos((al*math.cos(la)-rp)/rs)
-                            ll=-math.acos((rs*(al-rp*math.cos(la))+rp*math.sin(la)*np.sqrt(al**2+rp**2-rs**2-2*al*rp*math.cos(la)))/(al**2+rp**2-2*al*rp*math.cos(la)))
-                        
-                    
+                            ll=-math.acos((rs*(al-rp*math.cos(la))+rp*math.sin(la)*np.sqrt(al**2+rp**2-rs**2-2*al*rp*math.cos(la)))/(al**2+rp**2-2*al*rp*math.cos(la)))                 
                     if la==0:
                         ll=math.acos(rs/(al-rp))
-                        ul=math.acos(rs/(al-rp))
-                    
+                        ul=math.acos(rs/(al-rp))                   
                     #General integral function
                     def function(x,th,la): 
-                        a=-rs*math.sin(th)*math.cos(th)*math.sin(np.pi-la)+al*math.cos(np.pi-la)*math.cos(th)*math.cos(lon)+rp*math.cos(th)
-                        b=rs*math.cos(np.pi-la)*(math.cos(th))**2
-                        c=rs**2+al**2+rp**2 - 2*rs*rp*math.sin(th)*math.sin(la)+ 2*al*rp*math.cos(np.pi-la)*math.cos(lon)
-                        e=-2*(al+rp*math.cos(np.pi-la))*rs*math.cos(th)
-                        mu=abs(-rs+(al+rp*math.cos(np.pi-la))*math.cos(th)*math.cos(x+lon)+rp*math.sin(th)*math.sin(la))/(c+e*math.cos(x+lon))**(1/2)
+                        rho=al+rp*math.cos(la)*math.cos(lon)
+                        a=(-rs*math.cos(th)*math.cos(x)+rho)*math.cos(la)*math.cos(lon)+(-rs*math.cos(th)*math.sin(x)-rp*math.cos(la)*math.sin(lon))*math.cos(la)*math.sin(lon) 
+                        b=rs*math.sin(th)*math.sin(la)-rp*math.sin(la)**2
+                        c=(rs*math.cos(th)*math.cos(x)-rho)**2+(rs*math.cos(th)*math.sin(x)+rp*math.cos(la)*math.sin(lon))**2+(rs*math.sin(th)-rp*math.sin(la))**2
+                        ast=(rs*math.cos(th)*math.cos(x)-rho)*math.cos(th)*math.cos(x)+(rs*math.cos(th)*math.sin(x)+rp*math.cos(la)*math.sin(lon))*math.cos(th)*math.sin(x) 
+                        bst=rs*math.sin(th)**2-rp*math.sin(la)*math.sin(th)
+                        mu=abs(ast+bst)/math.sqrt(c)                     
                         if para==1:
                             lf=1-u*(1-mu)
                         if para==2:
                             lf=1-u1*(1-mu)-u2*(1-mu)**2
-                        return abs(a-b*math.cos(x+lon))*lf*mu/(c+e*math.cos(x+lon))**(3/2)
+                        return (a+b)*lf*mu*math.cos(th)/(c**1.5)
                     def integration(th,la): #First integral
-                        return quad(function,ll,ul,args=(th,la))[0]
-                    
-                    if parameter==0:
-                        def integration(th,la): #First integral
-                            return quad(function,-y3,y3,args=(th,la))[0]
-                    
-                    #Second integral
-                    
+                        return quad(function,-y3,y3,args=(th,la))[0] #A bit simplistic approximation for rotation but works well        
+                    #Second integral                    
                     value=quad(lambda th: integration(th,la),ll, ul)[0]
                     la5=math.atan(al*math.tan(la)*math.cos(la)/(al*math.cos(la)-rp))
-                    lon5=math.atan(al*math.tan(lon)*math.cos(lon))/(al*math.cos(lon)-rp)
-                    if la5<0:
-                        newp=la
-                        newa.append(newp)
-        
-                    value2=value*P/(4*np.pi*np.pi)
-                    
+                    lon5=math.atan(al*math.tan(lon)*math.cos(lon))/(al*math.cos(lon)-rp)                    
+                    tange=math.acos(rp/al)        
+                    value2=value*P/(4*np.pi*np.pi)                    
                     if lon>s1 or lon<-s1: # This represents the cone bound by external tangent planets. All latitudes share the same cut-off longitude.
-                        value2=0
-                    
-                    final.append(value2)
-                    
-                    old=abs(P1*math.cos(la5)/(4*np.pi*(al**2+rp**2-2*al*rp*math.cos(la))))
- 
-                    if la>=0: 
-                        if la5<0 or lon5<0:
-                            old=0
-                    if la<0:
-                        if la5>0 or lon5>0:
-                    
-                            old=0
-                    
-                    oldfor.append(old)
-        
+                       value2=0
+                    final.append(value2)                    
+                    old=P1*(al*math.cos(la)*math.cos(lon)-rp)/(4*np.pi*(al**2+rp**2-2*al*rp*math.cos(la)*math.cos(lon))**1.5)
+                    if lon>tange or la>tange:
+                        old=0
+                    if lon<-tange or la<-tange:
+                        old=0    
+                    oldfor.append(old)        
                 newval=np.mean(final)
                 integrated.append(newval)
-                integrated_comp.append(np.mean(oldfor))
- 
+                integrated_comp.append(np.mean(oldfor)) 
             inverse.append(integrated_comp)
             average.append(integrated)
             aver=np.asarray(average)
-            inve=np.asarray(inverse)
-           
+            inve=np.asarray(inverse)           
             P_lat_orbit_avg = np.mean(aver, axis=0)  
-            
             inve1=np.mean(inve,axis=0)
             A = 0.3
-            aver1 = ((P_lat_orbit_avg * 10**8 * (1 - A)) / 5.67) ** 0.25
- 
-            
+            aver1 = ((P_lat_orbit_avg * 10**8 * (1 - A)) / 5.67) ** 0.25         
         P_global_avg = np.sum(P_lat_orbit_avg * np.cos(la1)) / np.sum(np.cos(la1))         
         T_b = ((P_global_avg * 10**8 * (1 - A)) / 5.67) ** 0.25
-        
         print(T_b)
-        
-        print(P_lat_orbit_avg[299])
-        
         maxlatitude=symp*57.3
-        #tickarray2=np.array([-150,-130,-110,-90,-70,-50,-30,-10,10,30,50,70,90,110,130,150])
         plt.subplot(row,col,te)
         if parameter==0:
             plt.plot(la2,P_lat_orbit_avg,'b-',label="Geometric Model")
             plt.plot(la2,inve1,'r--', label="Inverse-square law")
-        plt.plot(la2,aver1,'b-',label="Geometric Model")
-
-        #plt.xticks(tickarray2,fontsize=14)
-        #plt.yticks(fontsize=14)
+        if parameter==1:    
+            plt.plot(la2,P_lat_orbit_avg,'b-',label="Geometric Model")
+            plt.plot(la2,inve1,'r--', label="Inverse-square law")
         plt.axvline(x=maxlatitude,color='gray',linestyle='--',label='Critical point of symmetry')
         plt.axvline(x=-maxlatitude,color='gray',linestyle='--')
-        #plt.axvline(x=symp*57.3,color='gray',linestyle='dashdot',label='Critical point of symmetry')
-        #plt.axvline(x=-symp*57.3,color='gray',linestyle='dashdot')
-        plt.title("{0},[a={1},Rs={2},Teff={3},Rp={4}]".format(exoplanet,round(al1,4),round(rs1,2),fa1,round(rp1,2)),fontsize=16)
+        plt.title("{0}".format(exoplanet),fontsize=16)
         plt.xlabel("Latitude ",fontsize=16)
-        plt.ylabel("Effective Temperature (K)",fontsize=16)
+        if parameter==0:
+            plt.ylabel("Irradiance ($W/m^2$)",fontsize=16)
+        if parameter==1:
+            plt.ylabel("Effective Temperature (K)",fontsize=16)
         plt.legend(fontsize=16)
-        #plt.xlim(-130,130)
 imagename=exoplanet+".jpg"
 if num>1:
     imagename=input("Saving image..Enter image name and format:")
 plt.savefig(imagename,dpi=300)
 plt.show()  
-#print("The Terminator extends to ",round(s1*57.3,3), "degrees from the equator")
+print("The Terminator extends to ",round(s1*57.3,3), "degrees from the equator")
