@@ -201,7 +201,7 @@ for te in range(1,num+1):
             print(Style.RESET_ALL)
         true1=np.linspace(0,270,number)
         if te==num:
-            print(Fore.WHITE +'Generating Plot, Please wait.. \033[1;30;47m')
+            print(Fore.WHITE +'Generating Plot, Please wait ~1 minute.. \033[1;30;47m')
         print(Style.RESET_ALL)
         average=[]
         inverse=[]        
@@ -307,7 +307,7 @@ for te in range(1,num+1):
                         a=(-rs*math.cos(th)*math.cos(x)+rho)*math.cos(la)*math.cos(lon)+(-rs*math.cos(th)*math.sin(x)-rp*math.cos(la)*math.sin(lon))*math.cos(la)*math.sin(lon) 
                         b=rs*math.sin(th)*math.sin(la)-rp*math.sin(la)**2
                         c=(rs*math.cos(th)*math.cos(x)-rho)**2+(rs*math.cos(th)*math.sin(x)+rp*math.cos(la)*math.sin(lon))**2+(rs*math.sin(th)-rp*math.sin(la))**2
-                        ast=(rs*math.cos(th)*math.cos(x)-rho)*math.cos(th)*math.cos(x)+(rs*math.cos(th)*math.sin(x)+rp*math.cos(la)*math.sin(lon))*math.cos(th)*math.sin(x) 
+                        ast=(rs*math.cos(th)*math.cos(x)-rho)*math.cos(th)*math.cos(x)+(rs*math.cos(th)*math.sin(x)-rp*math.cos(la)*math.sin(lon))*math.cos(th)*math.sin(x) 
                         bst=rs*math.sin(th)**2-rp*math.sin(la)*math.sin(th)
                         mu=abs(ast+bst)/math.sqrt(c)                     
                         if para==1:
@@ -341,6 +341,8 @@ for te in range(1,num+1):
             inve=np.asarray(inverse)           
             P_lat_orbit_avg = np.mean(aver, axis=0)  
             inve1=np.mean(inve,axis=0)
+            err=P_lat_orbit_avg[150]-inve1[150]
+            print(err)
             A = 0.3
             aver1 = ((P_lat_orbit_avg * 10**8 * (1 - A)) / 5.67) ** 0.25         
         P_global_avg = np.sum(P_lat_orbit_avg * np.cos(la1)) / np.sum(np.cos(la1))         
@@ -352,8 +354,8 @@ for te in range(1,num+1):
             plt.plot(la2,P_lat_orbit_avg,'b-',label="Geometric Model")
             plt.plot(la2,inve1,'r--', label="Inverse-square law")
         if parameter==1:    
-            plt.plot(la2,P_lat_orbit_avg,'b-',label="Geometric Model")
-            plt.plot(la2,inve1,'r--', label="Inverse-square law")
+            plt.plot(la2,aver1,'b-',label="Geometric Model")
+            #plt.plot(la2,inve1,'r--', label="Inverse-square law")
         plt.axvline(x=maxlatitude,color='gray',linestyle='--',label='Critical point of symmetry')
         plt.axvline(x=-maxlatitude,color='gray',linestyle='--')
         plt.title("{0}".format(exoplanet),fontsize=16)
